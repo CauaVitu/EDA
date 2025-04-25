@@ -9,8 +9,6 @@ int main(){
         std::cin >> v;
         arvore.add(v);
     }
-    arvore.BFS();
-    std::cout << std::endl;
     arvore.show();
     std::cout << std::endl;
     return 0;

@@ -27,10 +27,8 @@ public:
         show(m_root, "");
     }
 
-    void BFS() {
-        BFS(m_root);
-    
-    
+void BFS() {
+    BFS(m_root);
 }
 
     // Funcao publica que recebe uma chave e retorna true se 
@@ -82,12 +80,11 @@ private:
 
 
     int height(Node* node) {
-        if (node == nullptr) return 0;
-        return node->height;
+        return (node == nullptr) ? 0 : node->height;
     }
 
     int balance(Node* node) {
-        return height(node->left) - height(node->right);
+        return (height(node->right) - height(node->left));
     } 
 
     Node* rightRotation(Node* node){
@@ -121,7 +118,9 @@ private:
         } else {
             node->right = add(node->right, k);
         }
-        node = fixup_node(node,k);
+        node = fixup_node(node,k); //regulariza a arvore
+        // Atualiza a altura do nodo
+        node->height = 1 + max (height(node->left), height(node->right));
         return node;
     }
 
@@ -132,24 +131,24 @@ private:
         int bal = balance(node);
         // Caso 1(a) - Rotação à direita
         if (bal < -1 && key < node->left->key){
-            return rightRotation(node);
-        }
-        // Caso 2(a) - Rotação à esquerda
-        else if (bal > 1 && key < node->right->key){
+        // Caso 1(a) - Rotação à direita
+        if (bal > 1 && key < node->right->key){
             return leftRotation(node);
         }
         // Caso 1(b) - Dupla rotação à direita
-        else if (bal < -1 && key > node->left->key){
-            node->left = leftRotation(node->left);
-            return rightRotation(node);
-        }
-        // Caso 2(b) - Dupla rotação à esquerda
         else if (bal > 1 && key > node->right->key){
             node->right = rightRotation(node->right);
             return leftRotation(node);
         }
-        return node;
-
+        // Caso 2(a) - Rotação à esquerda
+        else if (bal < -1 && key < node->left->key){
+            return rightRotation(node);
+        }
+        // Caso 2(b) - Dupla rotação à esquerda
+        else if (bal < -1 && key > node->left->key){
+            node->left = leftRotation(node->left);
+            return rightRotation(node);
+        }
     }
 
     // Funcao recursiva privada que recebe a raiz 
