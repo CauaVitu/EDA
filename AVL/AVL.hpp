@@ -2,6 +2,7 @@
 #define AVL_HPP
 #include "Node.hpp"
 #include <queue>
+#include <vector>
 
 using namespace std;
 class AVL {
@@ -9,14 +10,25 @@ public:
     // Construtor: cria uma AVL vazia
     AVL() {
         m_root = nullptr;
+        
     }
     // Função publica que insere a chave
     void add(int key) {
         m_root = add(m_root, key);
     }
 
+    // Funcao publica que retorna se a arvore esta vazia
+    bool empty() const {
+        return m_root == nullptr;
+    }
+
+    // Funcao publica que retorna o numero de nos da arvore
+    int size() const {
+        return size(m_root);
+    }
+
     // Funcao publica que retorna a raiz da arvore]
-    Node* root(){
+    Node* root() {
         return m_root;
     }
 
@@ -42,6 +54,29 @@ void BFS() {
     bool contains(int k) const{
         Node *aux = contains(m_root, k);
         return aux != nullptr;
+    }
+
+    Node* find(int k) const{
+        try
+        {
+            Node *aux = contains(m_root, k);
+            if (aux == nullptr)
+                throw std::runtime_error("Element not found");
+            else return aux;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return nullptr; // Return nullptr or handle the error as needed
+        }
+        
+    }
+
+    // Funcao privada que retorna o numero de nos da arvore
+    int size(Node* node) const {
+        if(node == nullptr)
+            return 0;
+        return 1 + size(node->left) + size(node->right);
     }
 
     // Funcao iterativa publica que recebe uma chave 
@@ -116,6 +151,7 @@ private:
     // que insere um nodo na arvore
     Node* add(Node* node, int k) {
         if (node == nullptr){
+            // Cria um novo nodo
             return new Node(k, nullptr, nullptr);
         } else if (k == node->key){
             return node;
