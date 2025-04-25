@@ -14,6 +14,12 @@ public:
     void add(int key) {
         m_root = add(m_root, key);
     }
+
+    // Funcao publica que retorna a raiz da arvore]
+    Node* root(){
+        return m_root;
+    }
+
     // Funcao publica: libera os nodos da arvore
     void clear() {
         m_root = clear(m_root);
@@ -33,7 +39,7 @@ void BFS() {
 
     // Funcao publica que recebe uma chave e retorna true se 
     // e somente se a chave estiver na arvore. 
-    bool contains(int k) {
+    bool contains(int k) const{
         Node *aux = contains(m_root, k);
         return aux != nullptr;
     }
@@ -130,25 +136,24 @@ private:
         // Verifica o balanceamento
         int bal = balance(node);
         // Caso 1(a) - Rotação à direita
-        if (bal < -1 && key < node->left->key){
-        // Caso 1(a) - Rotação à direita
-        if (bal > 1 && key < node->right->key){
-            return leftRotation(node);
-        }
-        // Caso 1(b) - Dupla rotação à direita
-        else if (bal > 1 && key > node->right->key){
-            node->right = rightRotation(node->right);
-            return leftRotation(node);
-        }
-        // Caso 2(a) - Rotação à esquerda
-        else if (bal < -1 && key < node->left->key){
+        if (bal < -1 && key < node->left->key) {
             return rightRotation(node);
         }
-        // Caso 2(b) - Dupla rotação à esquerda
-        else if (bal < -1 && key > node->left->key){
+        // Caso 1(b) - Dupla rotação à direita
+        else if (bal < -1 && key > node->left->key) {
             node->left = leftRotation(node->left);
             return rightRotation(node);
         }
+        // Caso 2(a) - Rotação à esquerda
+        else if (bal > 1 && key > node->right->key) {
+            return leftRotation(node);
+        }
+        // Caso 2(b) - Dupla rotação à esquerda
+        else if (bal > 1 && key < node->right->key) {
+            node->right = rightRotation(node->right);
+            return leftRotation(node);
+        }
+        return node;
     }
 
     // Funcao recursiva privada que recebe a raiz 
@@ -194,7 +199,7 @@ private:
     // e uma chave k e retorna o ponteiro para o nói que contém a
     // chave se a chave estiver na arvore; caso contrario, ela
     // retorna nulo.
-    Node* contains(Node* node, int k) {
+    Node* contains(Node* node, int k) const {
         // Caso de parada: achei ou não achei a chave
         if(node == nullptr || node->key == k) {
             return node;
