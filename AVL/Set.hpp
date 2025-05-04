@@ -3,7 +3,8 @@
 #include "AVL.hpp"
 #include "Node.hpp"
 #include <iostream>
-
+#include <queue>
+#include <optional>
 using namespace std;
 
 class Set : public AVL {
@@ -13,7 +14,7 @@ class Set : public AVL {
 private:
     AVL arvore; // AVL tree to store the set elements
 public:
-    Set() : arvore() {}
+    Set() : arvore() {} // Default constructor
 
     ~Set() {
         arvore.clear();
@@ -25,10 +26,11 @@ public:
         // The AVL class already handles duplicates, so we don't need to check for them here.
     }
 
+    
     // Remove an element from the set
     void erase(int value) {
-        if (arvore.contains(value)) {
-            arvore.remove(value); // Use the AVL class's remove method
+        if (contains(value)) {
+            AVL::remove(value); // Use the AVL class's remove method
         }
     }
 
@@ -51,75 +53,80 @@ public:
         std::swap(arvore, other.arvore); // Swap the AVL trees
     }
 
-    int minimun(){
-        try
-        {
-            Node* temp = arvore.root();
-            cout << "Root: " << temp->key << endl;
-            if (temp == nullptr) {
-                throw std::runtime_error("Set is empty, no minimum value.");
-            }
-            while (temp->left != nullptr) {
-                temp = temp->left; // Traverse to the leftmost node
-            }
-            return temp->key; // Return the minimum value
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-            return -1; // Return -1 or handle the error as needed
-        }
+    int maximum () {
+        return AVL::maximum(); // Call the AVL class's maximum method
     }
 
-    int maximum() {
-        try
-        {
-            Node* temp = arvore.root();
-            if (temp == nullptr) {
-                throw std::runtime_error("Set is empty, no maximum value.");
-            }
-            while (temp->right != nullptr) {
-                temp = temp->right; // Traverse to the rightmost node
-            }
-            return temp->key; // Return the maximum value
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-            return -1; // Return -1 or handle the error as needed
-        }
+    int minimum () {
+        return AVL::minimum(); // Call the AVL class's minimum method
     }
     
     int sucessor(int value) {
         try
         {
-            Node* temp = arvore.root();
+            vector<Node*> path;
+            Node* temp = AVL::root();
             if (temp == nullptr) {
                 throw std::runtime_error("Set is empty, no sucessor value.");
             }
-            temp = arvore.find(value); // Find the node with the given value
-            temp = temp->right; // Move to the right subtree
+            while (temp != nullptr) {
+                path.push_back(temp); // Store the path to the node
+                if (value < temp->key) {
+                    temp = temp->left; // Move to the left subtree
+                } else if (value > temp->key) {
+                    temp = temp->right; // Move to the right subtree
+                } else {
+                    break; // Found the node with the given value
+                }
+            }
             if (temp == nullptr) {
-                throw std::runtime_error("No sucessor found for the given value.");
+                throw std::runtime_error("Value not found in the set.");
+                return -1; // Return -1 or handle the error as needed
             }
-            while (temp->left != nullptr) {
-                temp = temp->left; // Traverse to the leftmost node in the right subtree
-            }
-            return temp->key; // Return the sucessor value   
+            //Case 1: Node has a right child
+            if (temp->right != nullptr) {
+                temp = temp->right; // Move to the left subtree
+                while (temp->left != nullptr) {
+                    temp = temp->left; // Traverse to the leftmost node in the left subtree
+                }
+                return temp->key; // Return the sucessor value
+            } 
+            else{
+                //Case 2: Node has no left child but it itself is the left child of its parent
+                path.pop_back(); // Remove the current node from the path
+                if (temp == path.back()->left) {
+                    return path.back()->key; // Return the predecessor value
+                } 
+                else {
+                    //Case 3: Node has no right child and it is the left child of its parent
+                    while(!path.empty()) {
+                        if (temp == path.back()->left) {
+                            return path.back()->key; // Return the predecessor value
+                        }
+                        temp = path.back(); // Move to the parent node
+                        path.pop_back(); // Remove the current node from the path
+                    }
+                    throw std::runtime_error("No sucessor found for the given value.");
+                    return -1; // Return -1 or handle the error as needed
+                }
+            }     
+
         }
         catch(const std::exception& e)
         {
             std::cerr << e.what() << '\n';
+            return -1; // Return -1 or handle the error as needed
         }
     }
 
-    int predecessor(int value) {
+    optional <int> predecessor(int value) {
         try
         {
             vector<Node*> path;
             Node* temp = AVL::root();
             if (temp == nullptr) {
                 throw std::runtime_error("Set is empty, no predecessor value.");
+                return nullopt; // Return nullopt or handle the error as needed;
             }
             while (temp != nullptr) {
                 path.push_back(temp); // Store the path to the node
@@ -167,7 +174,7 @@ public:
         catch(const std::exception& e)
         {
             std::cerr << e.what() << '\n';
-            return -1; // Return -1 or handle the error as needed
+            return nullopt; // Return nullopt or handle the error as needed
         }
     }
 
@@ -177,6 +184,12 @@ public:
         return arvore.empty(); // Check if the AVL tree is empty
     }
 
+    Set& operator=(const Set& other) {
+        if (this != &other) {
+            arvore = other.arvore; // Use the assignment operator of AVL to perform a deep copy
+        }
+        return *this;
+    }
 
 
     

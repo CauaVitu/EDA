@@ -28,9 +28,10 @@ public:
     }
 
     // Funcao publica que retorna a raiz da arvore]
-    Node* root() {
+    Node* root() const{
         return m_root;
     }
+    
 
     // Funcao publica: libera os nodos da arvore
     void clear() {
@@ -45,9 +46,6 @@ public:
         show(m_root, "");
     }
 
-void BFS() {
-    BFS(m_root);
-}
 
     // Funcao publica que recebe uma chave e retorna true se 
     // e somente se a chave estiver na arvore. 
@@ -67,7 +65,7 @@ void BFS() {
         catch(const std::exception& e)
         {
             std::cerr << e.what() << '\n';
-            return nullptr; // Return nullptr or handle the error as needed
+            return nullptr; // Return nullptr
         }
         
     }
@@ -95,25 +93,49 @@ void BFS() {
         return false;
     }
 
+    int minimum(){
+        try
+        {
+            Node* temp = root();
+            if (temp == nullptr) {
+                throw std::runtime_error("Set is empty, no minimum value.");
+            }
+            while (temp->left != nullptr) {
+                temp = temp->left; // Traverse to the leftmost node
+            }
+            return temp->key; // Return the minimum value
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return -1; // Return -1 or handle the error as needed
+        }
+    }
+
+    int maximum() {
+        try
+        {
+            Node* temp = root();
+            if (temp == nullptr) {
+                throw std::runtime_error("Set is empty, no maximum value.");
+            }
+            while (temp->right != nullptr) {
+                temp = temp->right; // Traverse to the rightmost node
+            }
+            return temp->key; // Return the maximum value
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return -1; // Return -1 or handle the error as needed
+        }
+    }
+
     // Funcao que remove uma chave da arvore se ele existir
     void remove(int k) {
         m_root = _remove(m_root, k);
     }
 
-    void pre() {
-        bool first = true;
-        pre(m_root,first);
-    }
-
-    void in() {
-        bool first = true;
-        in(m_root,first);
-    }
-
-    void pos(){
-    bool first = true;    
-    pos(m_root,first);
-}
 
 private:
     // ponteiro para a raiz da arvore
@@ -250,7 +272,10 @@ private:
 
     // Funcao privada recursiva que busca a chave a ser removida
     Node* _remove(Node* node, int k) {
-        if(node == nullptr)
+        try
+        {    
+            if(node == nullptr)
+            throw std::runtime_error("Element not found");
             return nullptr;
         if(node->key == k) 
             return _remove_node(node);
@@ -259,51 +284,19 @@ private:
         else 
             node->right = _remove(node->right, k);
         return node;
-    }
-
-void in(Node* a, bool& first) {
-    if (a == nullptr) return;
-
-    in(a->left, first);
-    if (!first) cout << " ";
-    cout << a->key;
-    first = false;
-    in(a->right, first);
-}
-
-void pre(Node* a, bool& first) {
-    if (a == nullptr) return;
-
-    if (!first) cout << " ";
-    cout << a->key;
-    first = false;
-    pre(a->left, first);
-    pre(a->right, first);
-}
-
-void pos(Node* a, bool& first) {
-    if (a == nullptr) return;
-
-    pos(a->left, first);
-    pos(a->right, first);
-    if (!first) cout << " ";
-    cout << a->key;
-    first = false;
-}
-
-    void BFS(Node* node){
-        queue <Node*> q;
-        q.push(node);
-        Node* atual;
-        while(q.empty() != true){
-        atual = q.front();
-        cout << atual->key;
-        q.pop();
-        if (atual->left != nullptr) q.push(atual->left);
-        if (atual->right != nullptr) q.push (atual->right);
-        if (q.empty() != true) cout << " ";
         }
+        // Caso o elemento não seja encontrado
+        // Exceção lançada
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+
+            return nullptr; // Return nullptr
+        }
+        
     }
+
+
 
 
     // Funcao privada iterativa que remove o nodo passado como parametro.
