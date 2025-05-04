@@ -1,0 +1,3 @@
+Finish implementing and debugging set operations
+Comment code
+Optimize or Simplify Sucessor and Predecessor
