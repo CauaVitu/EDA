@@ -18,6 +18,25 @@ void clearScreen() {
 
 
 
+// Função privada que retorna um ponteiro para um array de inteiros
+// que é o resultado da intercalação de dois vectors de inteiros
+int* intercala(vector<int> a, vector<int> b){
+    int* result = new int[a.size() + b.size()];
+    int count = 0;
+    while (!a.empty () && !b.empty()){
+        if (a[0] < b[0]){
+            result[count++] = a[0];
+            a.erase(a.begin());
+        }
+        else{
+            result[count++] = b[0];
+            b.erase(b.begin());
+        }
+    }
+}
+
+
+
 
 int main(){
     // We'll use a vector to store the sets

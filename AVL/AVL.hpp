@@ -12,6 +12,33 @@ public:
         m_root = nullptr;
         
     }
+
+    // Construtor: cria uma AVL com um array de elementos ordenados e um tamanho n
+    // O array deve estar ordenado para que a arvore seja balanceada
+    AVL(int* arr, int n) {
+        m_root = nullptr;
+        Node* temp = m_root;
+        int mid = n/2;
+        // Create the root node with the middle element of the array
+        m_root = BuildTreeWithArray(arr, 0, n - 1);
+    }
+
+    Node* BuildTreeWithArray(int* arr, int start, int end) {
+        if (start > end) {
+            return nullptr;
+        }
+        int mid = (start + end) / 2;
+        Node* node = new Node(arr[mid], nullptr, nullptr);
+        // Construimos a subarvore esquerda e direita recursivamente, usando uma lógica parecida
+        // com a busca binária para encontrar o elemento do meio
+        node->left = BuildTreeWithArray(arr, start, mid - 1);
+        node->right = BuildTreeWithArray(arr, mid + 1, end);
+        // Por ultimo atualizamos a altura dos nós
+        node->height = max(height(node->left), height(node->right)) + 1;
+        return node;
+    }
+
+
     // Função publica que insere a chave
     void add(int key) {
         m_root = add(m_root, key);
@@ -158,6 +185,21 @@ private:
         temp->height = max(height(temp->left), height(temp->right)) + 1;
         return temp;
     }
+
+
+    // Função privada que retorna um ponteiro para um array de inteiros
+    // que contém os elementos da árvore em ordem crescente
+    vector<int> toArray(vector <int> v,Node* node, int& size) {
+        if (node == nullptr) {
+            return v;
+        }
+        v = toArray(v, node->left, size);
+        v.push_back(node->key);
+        v = toArray(v, node->right, size);
+        return v;
+    }
+
+    
 
     Node* leftRotation(Node* node){
         Node* temp = node->right;

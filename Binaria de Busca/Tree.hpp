@@ -162,7 +162,6 @@ private:
 
 void in(Node* a, bool& first) {
     if (a == nullptr) return;
-
     in(a->left, first);
     if (!first) cout << " ";
     cout << a->key;

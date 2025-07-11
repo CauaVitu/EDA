@@ -1,0 +1,39 @@
+1:
+
+
+
+
+
+
+
+minFixUp(A, i)
+    p = i/2
+    while p >= 1 and A[i] < A[p]
+        minMoveUp(A,i)
+        i = p
+        p = p/2
+
+maxFixDown(A, i)
+    d = A.D_ariedade 
+    while (d * i + 1 < A.heapSize)
+        maior = i
+
+        // Percorre os d filhos de i
+        for k = 1: k < d 
+            filho = d * i + k
+            if filho < A.heapSize and A[filho] > A[maior]
+                maior = filho
+
+        if maior == i
+            break
+
+        temp = A[i]
+        A[i] = A[maior]
+        A[maior] = temp
+        i = maior
+
+
+
+
+
+4:

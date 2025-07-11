@@ -1,1 +1,0 @@
-result = new Set(setDifference(*sets[temp1], *sets[temp2]));
