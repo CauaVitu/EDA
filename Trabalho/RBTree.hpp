@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Node.hpp"
+#include <vector>
 using namespace std;
 
 enum Color { RED, BLACK };
@@ -10,6 +11,7 @@ enum Color { RED, BLACK };
 template<typename T>
 class RBTree {
 private:
+    
     struct Node {
         T key;
         Color color;
@@ -22,6 +24,7 @@ private:
 
     Node* root;
    
+    // Rotação esquerda
     void rotateLeft(Node* x) {
         Node* y = x->right;
         x->right = y->left;
@@ -38,6 +41,7 @@ private:
         rotations_counter++; // Incrementa o contador de rotações
     }
 
+    // Rotação direita
     void rotateRight(Node* x) {
         Node* y = x->left;
         x->left = y->right;
@@ -54,9 +58,10 @@ private:
         rotations_counter++; // Incrementa o contador de rotações
     }
 
+    // Corrige a árvore após a inserção
+    // Mantém as propriedades da árvore rubro-negra
     void fixInsert(Node* z) {
         while (z->parent && z->parent->color == RED) {
-            comparison_counter++; // Incrementa o contador de comparações
             if (z->parent == z->parent->parent->left) {
                 Node* y = z->parent->parent->right;
                 if (y && y->color == RED) {
@@ -81,7 +86,6 @@ private:
                     z->parent->parent->color = RED;
                     z = z->parent->parent;
                 } else {
-                    comparison_counter++;
                     if (z == z->parent->left) {
                         z = z->parent;
                         rotateRight(z);
@@ -95,6 +99,8 @@ private:
         root->color = BLACK;
     }
 
+    // Transplanta um nó u por um nó v
+    // Utilizado na remoção de nós
     void transplant(Node* u, Node* v) {
         if (!u->parent)
             root = v;
@@ -107,12 +113,16 @@ private:
         if (v) v->parent = u->parent;
     }
 
+    // Encontra o nó de menor valor na sub-árvore
+    // Utilizado na remoção de nós
     Node* minimum(Node* node) {
         while (node->left)
             node = node->left;
         return node;
     }
 
+    // Corrige a árvore após a remoção
+    // Mantém as propriedades da árvore rubro-negra
     void fixDelete(Node* x) {
         while (x != root && (!x || x->color == BLACK)) {
             comparison_counter++; // Incrementa o contador de comparações
@@ -171,12 +181,14 @@ private:
         if (x) x->color = BLACK;
     }
 
-    Node* search(Node* node, T key) {
-        if (!node || node->key == key){
-            comparison_counter++;
+    // Busca um nó com a chave especificada recursivamente
+    Node* search(Node* node, T key) const{
+        Comparator<T> cmp;
+        if (!node || (!cmp(node->key, key) && !cmp(key, node->key))) {
+            comparison_counter+=2;
             return node;
         }   
-        if (key < node->key){
+        if (cmp(key, node->key)){
             comparison_counter++;
             return search(node->left, key);
         }
@@ -185,13 +197,23 @@ private:
     }
 
 
-    void destroy(Node* node) {
-        if (!node) return;
-        destroy(node->left);
-        destroy(node->right);
+    // Limpa a árvore recursivamente
+    // Deleta todos os nós e retorna nullptr
+    Node* clear(Node* node) {
+        if (!node) return nullptr;
+        clear(node->left);
+        clear(node->right);
         delete node;
+        return nullptr;
     }
 
+    int size(Node* node) const {
+        if (node == nullptr) return 0;
+        return 1 + size(node->left) + size(node->right);
+    }
+
+    // Exibe a árvore em formato de texto
+    // (Depreciado no caso de dicionários por causa do uso de pair)
     void bshow(Node* node, std::string heranca) const {
         if(node != nullptr && (node->left != nullptr || node->right != nullptr))
             bshow(node->right , heranca + "r");
@@ -208,28 +230,56 @@ private:
             bshow(node->left, heranca + "l");
     }
 
+    // Itera recursivamente sobre a arvore e guarda num vector
+    vector<T> iterate (Node* node, vector<T>& result){
+        if (node) {
+            iterate(node->left,result);
+            result.push_back(node->key);
+            iterate(node->right,result);
+        }
+        return result;
+    }
+
 public:
-     mutable int comparison_counter = 0; // Contador de comparações
-     int rotations_counter = 0; // Contador de rotações
+
+    
+    vector<T> iterate() {
+        vector<T> result;
+        iterate(root, result);
+        return result;
+    }
+
+    // Mutable pois precisa ser usado em funções const
+    mutable int comparison_counter = 0; // Contador de comparações
+    mutable int rotations_counter = 0; // Contador de rotações
 
     int get_rotations_counter() const {
         return rotations_counter;
     }
 
-     get_comparison_counter() const {
+    int get_comparison_counter() const {
         return comparison_counter;
     }
-    RBTree() : root(nullptr) {}
-    ~RBTree() { destroy(root); }
 
+
+
+    RBTree() : root(nullptr) {}
+    ~RBTree() { clear(root); }
+
+    void clear(){
+        root = clear(root);
+    }
+
+    // Insere um novo nó com a chave especificada
+    // Mantém as propriedades da árvore rubro-negra
     void insert(T key) {
         Node* z = new Node(key);
         Node* y = nullptr;
         Node* x = root;
-
+        Comparator<T> cmp;
         while (x) {
             y = x;
-            if (z->key < x->key){
+            if (cmp(z->key, x->key)) {
                 comparison_counter++; // Incrementa o contador de comparações
                 x = x->left;
             }
@@ -240,7 +290,7 @@ public:
         z->parent = y;
         if (!y)
             root = z;
-        else if (z->key < y->key)
+        else if (cmp(z->key, y->key))
             y->left = z;
         else
             y->right = z;
@@ -248,6 +298,9 @@ public:
         fixInsert(z);
     }
 
+    // Remove o nó com a chave especificada
+    // Rebalanceia a árvore se necessário
+    // Mantém as propriedades da árvore rubro-negra
     void remove(T key) {
         Node* z = search(root, key);
         if (!z) return;
@@ -267,7 +320,6 @@ public:
             yOriginalColor = y->color;
             x = y->right;
             if (y->parent == z) {
-                comparison_counter++;
                 if (x) x->parent = y;
             } else {
                 transplant(y, y->right);
@@ -285,12 +337,22 @@ public:
             fixDelete(x);
     }
 
+    // Verifica se a árvore contém um nó com a chave especificada
     bool contains(T key) {
         return search(root, key) != nullptr;
     }
+    
+    // Retorna o nó com a chave especificada (usado pro update)
+    Node* at(T key) const {
+        return search(root, key);
+    }
 
-void show() const {
+    void show() const {
         bshow(root, "");
+    }
+
+    int size() const {
+        return size(root);
     }
 };
 

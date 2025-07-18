@@ -44,7 +44,7 @@ private:
     float m_max_load_factor;
     Hash m_hash;
     mutable int comparison_counter = 0;
-    int colision_counter = 0;
+    mutable int colision_counter = 0;
 
     size_t get_next_prime(size_t x) const {
         if (x <= 2) return 3;
@@ -62,6 +62,7 @@ private:
         }
     }
 
+    // Optei por usar linear probing para resolver colisões
     size_t probe(const Key& key, bool for_insert = false) const {
         size_t index = m_hash(key) % m_table.size();
         size_t start = index;
@@ -96,6 +97,19 @@ public:
         m_max_load_factor = (load_factor <= 0) ? 0.7f : load_factor;
     }
 
+    // Itera sobre os elementos da tabela hash e retorna um vetor de pares (key, value)
+    std::vector<std::pair<Key,Value>> iterate (){
+        std::vector<std::pair<Key, Value>> result;
+        for (const auto& entry : m_table) {
+            if (entry.state == EntryState::OCCUPIED) {
+                result.emplace_back(entry.key, entry.value);
+            }
+        }
+        return result;
+    }
+
+    // Insere um novo elemento no slot apropriado da tabela hash.
+    // Se chegarmos no load_factor rehash é chamado para aumentar o tamanho da tabela.
     bool insert(const Key& key, const Value& value) {
         if (static_cast<float>(m_size + 1) / m_table.size() > m_max_load_factor) {
             rehash(m_table.size() * 2);
@@ -107,6 +121,7 @@ public:
         return true;
     }
 
+    // Remove um elemento da tabela hash, marcando-o como DELETED.
     bool remove(const Key& key) {
         size_t index = probe(key);
         if (m_table[index].state == EntryState::OCCUPIED && m_table[index].key == key) {
@@ -117,11 +132,14 @@ public:
         return false;
     }
 
+    // Verifica se um elemento está presente na tabela hash.
+    // Retorna true se o elemento estiver presente, false caso contrário.
     bool contains(const Key& key) const {
         size_t index = probe(key);
         return m_table[index].state == EntryState::OCCUPIED && m_table[index].key == key;
     }
 
+    // Retorna o valor associado a uma chave, se existir.
     Value& at(const Key& key) {
         size_t index = probe(key);
         if (m_table[index].state == EntryState::OCCUPIED) {
@@ -137,6 +155,7 @@ public:
         return colision_counter;
     }
 
+    // Parece uma duplicada, mas esse cara aqui é const e o outro não
     const Value& at(const Key& key) const {
         size_t index = probe(key);
         if (m_table[index].state == EntryState::OCCUPIED) {
@@ -155,10 +174,8 @@ public:
         return m_table[index].value;
     }
 
-    const Value& operator[](const Key& key) const {
-        return at(key);
-    }
-
+    // Limpa a tabela hash, removendo todos os elementos.
+    // Redimensiona a tabela para o tamanho inicial.
     void clear() {
         m_table.clear();
         m_table.resize(get_next_prime(19));
@@ -176,7 +193,6 @@ public:
             rehash(m_table.size() * 2);
         }
     }
-    int get_comparison_counter() const { return comparison_counter; }
 };
 
 #endif // OPEN_ADDRESS_HASHTABLE_HPP

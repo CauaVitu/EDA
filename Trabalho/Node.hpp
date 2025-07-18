@@ -3,10 +3,8 @@
 #include<iostream>
 
 template<typename T>
-// Esse cara aqui vai ser o Node tanto da AVL quanto da RBTree
-// Ele vai armazenar a chave, a altura, os filhos e o pai
-// Também vai ter a cor da Arvore Rubro-Negra ( true for RED, false for BLACK)
-// E tem height para a AVL, que é a altura do nó na árvore AVL
+// Deveria ser um nó global, mas eu fiquei com preguiça de usar na Rubro-Negra
+// reliquia de quando eu tinha a ambição de fazer um nó genérico
 struct Node {
     T key;
     T value; // Valor associado à chave (opcional, mas será util para não precisar criar um par)
