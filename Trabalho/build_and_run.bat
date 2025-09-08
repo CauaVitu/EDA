@@ -26,7 +26,7 @@ timeout /t 1 /nobreak >nul
 REM Let's try the nuclear option - direct MinGW call
 set PATH=C:\msys64\mingw64\bin;%PATH%
 echo [PHASE 2] Invoking g++ directly from the shadow realm...
-g++.exe -std=c++17 main.cpp -o main.exe -IC:\msys64\mingw64\include -LC:\msys64\mingw64\lib -licuuc
+g++.exe -Wall main.cpp -o freq $(pkg-config --cflags --libs icu-uc icu-i18n)
 
 if %ERRORLEVEL% EQU 0 (
     echo.
