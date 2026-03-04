@@ -1,6 +1,4 @@
-Para facilitar, organizei todo o conteúdo Markdown dentro de um bloco de código que você pode copiar e salvar como `README.md` (ou em um arquivo `.txt` como solicitado). Ajustei o final do texto para incluir o link do seu perfil e deixá-lo com um acabamento mais profissional.
 
-```markdown
 # 📂 EDA - Estruturas de Dados (Data Structures)
 
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
@@ -100,11 +98,5 @@ Sinta-se à vontade para explorar o código, abrir *issues* com sugestões ou en
 ---
 
 *"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."* — **Linus Torvalds**
-
-```
-
-**Dica:** Salve esse conteúdo no seu repositório como `README.md` e o GitHub já vai renderizar tudo bonitão automaticamente.
-
-Gostaria que eu gerasse o texto do post do LinkedIn agora, unindo esse seu trabalho de **EDA** com o diagrama do **EduMoedas** que fizemos? Seria uma ótima forma de mostrar que você domina tanto o baixo nível (algoritmos) quanto o alto nível (arquitetura de sistemas).
 
 ```
