@@ -1,3 +1,6 @@
+Para facilitar, organizei todo o conteúdo Markdown dentro de um bloco de código que você pode copiar e salvar como `README.md` (ou em um arquivo `.txt` como solicitado). Ajustei o final do texto para incluir o link do seu perfil e deixá-lo com um acabamento mais profissional.
+
+```markdown
 # 📂 EDA - Estruturas de Dados (Data Structures)
 
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
@@ -12,10 +15,10 @@ Repositório dedicado à implementação e estudo de **Estruturas de Dados Funda
 O objetivo deste repositório é consolidar o conhecimento prático sobre como organizar e manipular dados de forma otimizada. Cada estrutura é implementada focando em clareza lógica e performance.
 
 ### 🛠️ Tecnologias e Ferramentas
-* [cite_start]**Linguagem Principal:** C++ [cite: 7, 8, 10]
-* [cite_start]**Compilador:** GCC/G++ [cite: 8]
-* [cite_start]**Ambiente de Desenvolvimento:** Linux/WSL [cite: 2, 3, 4]
-* **Versionamento:** Git
+* **Linguagem Principal:** C++
+* **Compilador:** GCC/G++
+* [cite_start]**Ambiente de Desenvolvimento:** Linux/WSL [cite: 7]
+* [cite_start]**Versionamento:** Git & GitHub Desktop [cite: 7]
 
 ---
 
@@ -61,35 +64,47 @@ Para compilar e testar as implementações localmente:
    ```bash
    git clone [https://github.com/CauaVitu/EDA.git](https://github.com/CauaVitu/EDA.git)
 
-Navegue até o diretório desejado:
+```
 
-Bash
-
+2. **Navegue até o diretório desejado:**
+```bash
 cd nome-da-pasta
-Compile o código:
 
-Bash
+```
 
+
+3. **Compile o código:**
+```bash
 g++ main.cpp -o executavel
-Execute:
 
-Bash
+```
 
+
+4. **Execute:**
+```bash
 ./executavel
-🤝 Contribuição e Contato
-Sinta-se à vontade para explorar o código, abrir issues com sugestões ou enviar um pull request.
 
-GitHub: CauaVitu
+```
 
-LinkedIn: [Seu Nome de Usuário Aqui]
-
-“A má programação é o resultado da falta de uma boa estrutura de dados.”
 
 
 ---
 
-### Dicas Finais:
-1. **Dicionário de Dados:** Como você já tem experiência modelando bancos de dados complexos, se alguma dessas estruturas de EDA tiver uma lógica de banco (como a Hash), mencione isso.
-2. [cite_start]**Imagens:** Onde coloquei a tag de imagem acima, você pode substituir por um print real do seu código rodando no terminal do WSL[cite: 2, 11].
+## 🤝 Contato e Conexões
 
-O que você achou dessa estrutura? Se quiser, posso te ajudar a personalizar a seção
+Sinta-se à vontade para explorar o código, abrir *issues* com sugestões ou enviar um *pull request*.
+
+* **GitHub:** [CauaVitu](https://www.google.com/search?q=https://github.com/CauaVitu)
+* **LinkedIn:** [linkedin.com/in/cauavictor](https://www.google.com/search?q=https://www.linkedin.com/in/cauavictor)
+
+---
+
+*"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."* — **Linus Torvalds**
+
+```
+
+**Dica:** Salve esse conteúdo no seu repositório como `README.md` e o GitHub já vai renderizar tudo bonitão automaticamente.
+
+Gostaria que eu gerasse o texto do post do LinkedIn agora, unindo esse seu trabalho de **EDA** com o diagrama do **EduMoedas** que fizemos? Seria uma ótima forma de mostrar que você domina tanto o baixo nível (algoritmos) quanto o alto nível (arquitetura de sistemas).
+
+```
