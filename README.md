@@ -60,3 +60,36 @@ Para compilar e testar as implementações localmente:
 1. **Clone o repositório:**
    ```bash
    git clone [https://github.com/CauaVitu/EDA.git](https://github.com/CauaVitu/EDA.git)
+
+Navegue até o diretório desejado:
+
+Bash
+
+cd nome-da-pasta
+Compile o código:
+
+Bash
+
+g++ main.cpp -o executavel
+Execute:
+
+Bash
+
+./executavel
+🤝 Contribuição e Contato
+Sinta-se à vontade para explorar o código, abrir issues com sugestões ou enviar um pull request.
+
+GitHub: CauaVitu
+
+LinkedIn: [Seu Nome de Usuário Aqui]
+
+“A má programação é o resultado da falta de uma boa estrutura de dados.”
+
+
+---
+
+### Dicas Finais:
+1. **Dicionário de Dados:** Como você já tem experiência modelando bancos de dados complexos, se alguma dessas estruturas de EDA tiver uma lógica de banco (como a Hash), mencione isso.
+2. [cite_start]**Imagens:** Onde coloquei a tag de imagem acima, você pode substituir por um print real do seu código rodando no terminal do WSL[cite: 2, 11].
+
+O que você achou dessa estrutura? Se quiser, posso te ajudar a personalizar a seção
