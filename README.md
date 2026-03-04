@@ -61,13 +61,12 @@ Para compilar e testar as implementações localmente:
 1. **Clone o repositório:**
    ```bash
    git clone [https://github.com/CauaVitu/EDA.git](https://github.com/CauaVitu/EDA.git)
-
 ```
 
 2. **Navegue até o diretório desejado:**
+
 ```bash
 cd nome-da-pasta
-
 ```
 
 
@@ -98,5 +97,3 @@ Sinta-se à vontade para explorar o código, abrir *issues* com sugestões ou en
 ---
 
 *"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."* — **Linus Torvalds**
-
-```
